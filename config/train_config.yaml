@@ -1,0 +1,45 @@
+data_version: v1
+
+# Active model for this run. Override with --model CLI flag.
+active_model: qwen3vl-2b
+
+models:
+  - name: qwen3vl-0.8b
+    model_id: /mnt/pretrained_fm/Qwen3-VL-0.8B-Instruct
+    # Verify against swift.llm.ModelType in the installed ms-swift version
+    model_type: qwen3_5-vl
+  - name: qwen3vl-2b
+    model_id: /mnt/pretrained_fm/Qwen_Qwen3-VL-2B-Instruct
+    model_type: qwen3_5-vl
+  - name: internvl3_5-1b
+    model_id: /mnt/pretrained_fm/OpenGVLab_InternVL3_5-1B
+    model_type: internvl3_5
+  - name: internvl3_5-2b
+    model_id: /mnt/pretrained_fm/OpenGVLab_InternVL3_5-2B
+    model_type: internvl3_5
+
+# Relative to repo root; train_curriculum.py resolves to absolute at runtime.
+output_dir: runs/
+
+lora:
+  rank: 16
+  alpha: 32
+  # Verify exact flag name: --lora_dropout vs --lora_dropout_p in your ms-swift version
+  dropout: 0.05
+  # Verify ms-swift accepts "all-linear" shorthand for VLM architectures
+  target_modules: all-linear
+
+training:
+  num_train_epochs: 3
+  per_device_train_batch_size: 4
+  gradient_accumulation_steps: 4
+  learning_rate: 1.0e-4
+  lr_scheduler_type: cosine
+  warmup_ratio: 0.05
+  # epoch + limit=1 keeps only the final checkpoint per stage
+  save_strategy: epoch
+  save_total_limit: 1
+  # Maps to --torch_dtype bfloat16
+  torch_dtype: bfloat16
+  # Verify exact flag name: --val_dataset vs --eval_dataset in your ms-swift version
+  val_dataset_flag: val_dataset

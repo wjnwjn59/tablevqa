@@ -1,0 +1,9 @@
+tests/
+.claude
+.pytest_cache
+.DS_Store
+__MACOSX/
+__pycache__/
+.env
+.vscode/
+docs/

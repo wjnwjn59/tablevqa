@@ -1,0 +1,29 @@
+version: v1
+description: "4 table types, 80 rows each, baseline synthetic dataset"
+# Base directory for resolving relative image paths.
+# Relative to repo root; resolved at runtime using this config file's location.
+output_dir: data/v1/raw/
+
+# Table generation parameters
+num_rows: 80
+table_types:
+  - visual_noise
+  - charts
+  - hierarchical
+  - borderless_misaligned
+
+# Train/val split ratio applied per stage in convert_to_swift.py
+val_split_ratio: 0.1
+random_seed: 42
+
+# System prompt — must match SYSTEM_PROMPT in src/inference.py (authoritative)
+system_prompt: "Answer concisely without any extra explanation."
+
+# Annotation schema fields expected in data/<version>/raw/annotations.json
+# task_type: display label (e.g. "Visual Noise") — NOT used for grouping
+# difficulty: integer 1=easy 2=medium 3=hard — informational
+# stage: integer — PRIMARY grouping signal used by convert_to_swift.py
+annotation_fields:
+  - task_type
+  - difficulty
+  - stage
